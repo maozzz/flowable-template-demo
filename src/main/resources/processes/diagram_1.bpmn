@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://activiti.org/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lhksge" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="createOrder" name="Создание заявки" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_16zd49z</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0bfl1xq" camunda:expression="${orderService.processOrder()}">
+      <bpmn:incoming>Flow_16zd49z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wxa88g</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_16zd49z" sourceRef="StartEvent_1" targetRef="Activity_0bfl1xq" />
+    <bpmn:endEvent id="Event_11g1b3c">
+      <bpmn:incoming>Flow_1xavfzc</bpmn:incoming>
+      <bpmn:incoming>Flow_1cmv5ar</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xavfzc" sourceRef="NotificateBySms" targetRef="Event_11g1b3c" />
+    <bpmn:sequenceFlow id="Flow_1cmv5ar" sourceRef="NotificateByEmail" targetRef="Event_11g1b3c" />
+    <bpmn:serviceTask id="NotificateBySms" camunda:expression="${orderService.notificateSms()}">
+      <bpmn:incoming>Flow_0976qag</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xavfzc</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="NotificateByEmail" camunda:expression="${orderService.notificateEmail()}">
+      <bpmn:outgoing>Flow_1cmv5ar</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1wxa88g" sourceRef="Activity_0bfl1xq" targetRef="acceptOrder" />
+    <bpmn:sequenceFlow id="Flow_0976qag" sourceRef="acceptOrder" targetRef="NotificateBySms" />
+    <bpmn:userTask id="acceptOrder">
+      <bpmn:incoming>Flow_1wxa88g</bpmn:incoming>
+      <bpmn:outgoing>Flow_0976qag</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="createOrder">
+      <bpmndi:BPMNEdge id="Flow_1cmv5ar_di" bpmnElement="Flow_1cmv5ar">
+        <di:waypoint x="700" y="330" />
+        <di:waypoint x="786" y="330" />
+        <di:waypoint x="786" y="230" />
+        <di:waypoint x="872" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xavfzc_di" bpmnElement="Flow_1xavfzc">
+        <di:waypoint x="700" y="120" />
+        <di:waypoint x="786" y="120" />
+        <di:waypoint x="786" y="230" />
+        <di:waypoint x="872" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16zd49z_di" bpmnElement="Flow_16zd49z">
+        <di:waypoint x="228" y="230" />
+        <di:waypoint x="270" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wxa88g_di" bpmnElement="Flow_1wxa88g">
+        <di:waypoint x="370" y="230" />
+        <di:waypoint x="420" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0976qag_di" bpmnElement="Flow_0976qag">
+        <di:waypoint x="520" y="230" />
+        <di:waypoint x="560" y="230" />
+        <di:waypoint x="560" y="120" />
+        <di:waypoint x="600" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="192" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11g1b3c_di" bpmnElement="Event_11g1b3c">
+        <dc:Bounds x="872" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1f3fvrn_di" bpmnElement="NotificateBySms">
+        <dc:Bounds x="600" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kfk9zr_di" bpmnElement="NotificateByEmail">
+        <dc:Bounds x="600" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19oe92n_di" bpmnElement="Activity_0bfl1xq">
+        <dc:Bounds x="270" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lnzt65_di" bpmnElement="acceptOrder">
+        <dc:Bounds x="420" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
